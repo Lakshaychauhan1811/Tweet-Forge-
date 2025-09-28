@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Tweet Forge - AI-Powered Tweet Generator</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=4.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <h1><i class="fas fa-rocket"></i> Tweet Forge</h1>
+            </div>
+            <div class="nav-links">
+                {% if user_logged_in %}
+                    <a href="/dashboard" class="nav-link"><i class="fas fa-wand-magic-sparkles"></i> Creator</a>
+                    <span class="nav-link"><i class="fab fa-x-twitter"></i> @{{ user_username }}</span>
+                    <a href="/logout/x" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                {% else %}
+                    <a href="/login/x?redirect_url=/" class="nav-link"><i class="fab fa-x-twitter"></i> Login with X</a>
+                    <a href="/dashboard" class="nav-link"><i class="fas fa-play"></i> Get Started</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Create Professional Marketing Tweets</h1>
+                <p>Generate engaging tweets with real-time internet research. Perfect for businesses, marketers, and content creators.</p>
+                <a href="/dashboard" class="hero-cta-btn mega-cta-btn">
+                    <i class="fas fa-rocket"></i> 
+                    <span class="btn-text">Start Creating</span>
+                    <div class="btn-glow"></div>
+                </a>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2>Why TweetForge?</h2>
+                <div class="features-grid">
+                    <div class="feature-card motion-3d">
+                        <div class="feature-icon"><i class="fas fa-search"></i></div>
+                        <h3>Real-time Research</h3>
+                        <p>Uses Serper API to search the internet for current information about any topic or company.</p>
+                    </div>
+                    
+                    <div class="feature-card motion-3d">
+                        <div class="feature-icon"><i class="fas fa-bullseye"></i></div>
+                        <h3>AI-Powered Generation</h3>
+                        <p>Advanced AI creates professional marketing tweets with perfect tone and engagement optimization.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about">
+            <div class="container">
+                <h2>About TweetForge</h2>
+                <p>TweetForge is an AI-powered tweet generation platform that combines your topic with real-time internet research to craft engaging promotional tweets. Whether you're promoting a company, a product launch, or a trending topic, the platform uses up-to-date context to generate professional tweets that drive engagement.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/js/app.js?v=4.0"></script>
+</body>
+</html>

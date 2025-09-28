@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Tweet Forge - AI-Powered Tweet Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css?v=3.0">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="nav-brand">
+                    <h1><i class="fas fa-rocket"></i> Tweet Forge</h1>
+                </div>
+                <div class="nav-links">
+                    <a href="#" class="nav-link active"><i class="fas fa-wand-magic-sparkles"></i> Creator</a>
+                    {% if user_logged_in %}
+                        <span class="nav-link"><i class="fab fa-x-twitter"></i> @{{ user_username }} ({{ user_tier }})</span>
+                        <a href="/logout/x" class="nav-link">Logout</a>
+                    {% else %}
+                        <a href="/login/x?redirect_url=/dashboard" class="nav-link"><i class="fab fa-x-twitter"></i> Login with X</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <section class="welcome-section motion-3d">
+                <h2>Welcome to TweetForge, <span class="gradient-text">{{ user.name }}</span>!</h2>
+                <p>Create powerful promotional tweets using AI analysis of your prompts and real-time research. Perfect for business promotion and brand awareness.</p>
+                <div class="status-indicator">
+                        <span class="pulse"></span> Promotional AI System Active
+                </div>
+                {% if user_logged_in %}
+                <div class="login-status">
+                    <p>Login Status: <strong>Logged In</strong> ({{ user_tier }})</p>
+                </div>
+                {% else %}
+                <div class="login-status">
+                    <p>Login Status: <strong>Not Logged In</strong></p>
+                </div>
+                {% endif %}
+            </section>
+
+            <section class="stats">
+                <div class="stat-grid">
+                    <div class="stat-card motion-3d">
+                        <div class="stat-title">Average Reach Boost</div>
+                        <div class="stat-number" data-counter="180">0%</div>
+                        <div class="stat-foot">vs manual tweets</div>
+                    </div>
+                    <div class="stat-card motion-3d">
+                        <div class="stat-title">Time Saved</div>
+                        <div class="stat-number" data-counter="70">0%</div>
+                        <div class="stat-foot">content creation</div>
+                    </div>
+                    <div class="stat-card motion-3d">
+                        <div class="stat-title">User Satisfaction</div>
+                        <div class="stat-number" data-counter="96">0%</div>
+                        <div class="stat-foot">based on feedback</div>
+                    </div>
+                </div>
+            </section>
+
+            <div id="message-container"></div>
+
+            <section class="tweet-generator">
+                <div class="form-container motion-3d">
+                    <h3 style="margin-bottom:1rem;">Create Your Tweet</h3>
+                    <form id="tweetForm">
+                        <div class="form-group">
+                            <label for="topic">Enter your prompt</label>
+                            <input type="text" id="topic" class="form-control" placeholder="Give your topic to get a promotional tweet (e.g., summer sale, new app launch)." required>
+                            <small class="hint">Tip: Add one concrete benefit or detail for a stronger hook.</small>
+                        </div>
+                        <input type="hidden" id="max_chars" name="max_chars" value="{{ max_chars }}" />
+                        <!-- Target Audience removed per request -->
+                        <div class="form-group">
+                            <label for="hashtags">Hashtags</label>
+                            <input type="text" id="hashtags" class="form-control" placeholder="#Marketing, #Innovation (optional, comma separated)">
+                            <div class="character-count">0/5 hashtags</div>
+                        </div>
+                        
+
+                        <div class="form-actions" style="display:flex; gap:12px; flex-wrap:wrap;">
+                            <button type="submit" class="cyber-btn mega-btn" id="generateBtn">
+                                <i class="fas fa-rocket" style="margin-right: 12px; font-size: 1.2em;"></i> 
+                                <span class="btn-text">Generate Tweet</span>
+                                <div class="btn-glow"></div>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="form-container motion-3d" style="margin-top:1.5rem;">
+                    <h3 style="margin-bottom:1rem;">YouTube Link</h3>
+                    <form id="ytForm">
+                        <div class="form-group">
+                            <label for="yt_url">YouTube URL</label>
+                            <input type="url" id="yt_url" class="form-control" placeholder="https://www.youtube.com/watch?v=..." required>
+                        </div>
+                        <input type="hidden" id="yt_max_chars" name="max_chars" value="{{ max_chars }}" />
+                        <div class="form-actions">
+                            <button type="submit" class="cyber-btn" id="ytGenerateBtn">
+                                <i class="fas fa-play" style="margin-right:8px;"></i> Generate from YouTube
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                
+
+                <div class="loading" id="loadingIndicator">
+                    <div class="quantum-spinner">
+                        <div class="quantum-circle"></div>
+                        <div class="quantum-circle"></div>
+                        <div class="quantum-circle"></div>
+                    </div>
+                    <p>Generating your tweet<span class="dot-animation">.</span><span class="dot-animation">.</span><span class="dot-animation">.</span></p>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div id="tweet-display" class="tweet-display" style="display: none;">
+                    <div class="tweet-header">
+                        <h3><i class="fab fa-twitter"></i> Your Generated Tweet</h3>
+                        <span id="tweet-type-badge" class="tweet-type-badge" style="display:none;"></span>
+                    </div>
+                    <div class="tweet-content" id="tweet-content"></div>
+                    <div class="tweet-details" style="background: var(--bg-secondary); padding: 2rem; border-radius: var(--radius-lg); margin-top: 2rem; border: 1px solid rgba(0, 212, 255, 0.2);">
+                        <div class="hashtags-section" style="margin-bottom: 1.5rem;">
+                            <strong class="gradient-text">Hashtags:</strong>
+                            <div id="hashtags-display" style="margin-top: 0.5rem;"></div>
+                        </div>
+                        <div class="research-sources" style="margin-bottom: 1.5rem;">
+                            <strong class="gradient-text">Research Sources:</strong>
+                            <div id="sources-display" style="margin-top: 0.5rem;"></div>
+                        </div>
+                        <div class="tone-info">
+                            <strong class="gradient-text">Tone:</strong>
+                            <span id="tone-display" style="margin-left: 0.5rem;"></span>
+                        </div>
+                    </div>
+                    <div class="tweet-actions" style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="copy-btn" id="copyBtn">
+                            <i class="fas fa-copy" style="margin-right: 8px;"></i> Copy Tweet
+                        </button>
+                        {% if user_logged_in %}
+                        <form id="postToXForm" style="display:inline;">
+                            <button type="button" class="cyber-btn" id="postToXBtn">
+                                <i class="fab fa-x-twitter" style="margin-right: 8px;"></i> Post to X
+                            </button>
+                        </form>
+                        {% else %}
+                        <a href="/login/x?redirect_url=/dashboard" class="cyber-btn">
+                            <i class="fab fa-x-twitter" style="margin-right: 8px;"></i> Login to Post
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+            <section class="features">
+                <h2 class="section-title">Why Use TweetForge?</h2>
+                <div class="features-grid">
+                    <div class="feature-card motion-3d">
+                        <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                        <h3>Smart Promotional Research</h3>
+                        <p>AI analyzes your prompts and automatically researches topics to create targeted promotional content with real-time data integration.</p> 
+                    </div>
+                    <div class="feature-card motion-3d">
+                        <div class="feature-icon"><i class="fas fa-play"></i></div>
+                        <h3>YouTube Link Support</h3>
+                        <p>Paste any YouTube URL and TweetForge will use lightweight context to craft a compelling promotional tweet with the link appended.</p>
+                    </div>
+                    <div class="feature-card motion-3d">
+                        <div class="feature-icon"><i class="fas fa-bullseye"></i></div>
+                        <h3>Promotional-Focused AI</h3>
+                        <p>Specialized AI creates high-converting promotional tweets with clear hooks and concise CTAs.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="about motion-3d">
+                <h2>About TweetForge</h2>
+                <p>
+                    <strong class="gradient-text">TweetForge</strong> is an AI-powered tool for generating professional marketing tweets. Features include:
+                    <ul style="list-style-type: none; padding-left: 0; margin-top: 1rem;">
+                        <li><i class="fas fa-check" style="color: var(--neon-green); margin-right: 8px; filter: drop-shadow(var(--glow-green));"></i> Professional tweet generation for any topic or brand</li>
+                        <li><i class="fas fa-check" style="color: var(--neon-green); margin-right: 8px; filter: drop-shadow(var(--glow-green));"></i> Generate marketing tweets for YouTube videos by providing a link</li>
+                        <li><i class="fas fa-check" style="color: var(--neon-green); margin-right: 8px; filter: drop-shadow(var(--glow-green));"></i> Login with your X (Twitter) account for a personalized experience</li>
+                        <li><i class="fas fa-check" style="color: var(--neon-green); margin-right: 8px; filter: drop-shadow(var(--glow-green));"></i> Real-time research and fact integration for richer tweets</li>
+                        <li><i class="fas fa-check" style="color: var(--neon-green); margin-right: 8px; filter: drop-shadow(var(--glow-green));"></i> Privacy-focused: no data is stored or retained</li>
+                    </ul>
+                    Simply enter your topic, audience, and get a ready-to-use marketing tweet with vibrant, engaging content!
+                </p>
+            </section>
+
+            <section class="privacy-section">
+                <h2 class="section-title">Your Privacy Matters</h2>
+                <div class="privacy-card motion-3d">
+                    <div class="privacy-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="privacy-content">
+                        <h3>Data Protection</h3>
+                        <p>We take your privacy seriously. Here's how we protect your data:</p>
+                        <ul class="privacy-list">
+                            <li><i class="fas fa-check-circle"></i> We don't store your generated tweets</li>
+                            <li><i class="fas fa-check-circle"></i> All tweet generation happens privately on our servers</li>
+                            <li><i class="fas fa-check-circle"></i> We don't share your data with third parties</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <span id="footer-year"></span> TweetForge - AI-Powered Professional Tweet Generator</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js?v=4.0"></script>
+    <script>
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
