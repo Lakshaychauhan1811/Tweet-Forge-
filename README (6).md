@@ -131,9 +131,6 @@ SECRET_KEY=your-super-secret-key-change-this-in-production
    - Run `pip install -r requirements.txt`
    - Make sure you're in the correct directory
 
-4. **OCR features not working**
-   - Install optional dependencies: `pip install easyocr pdf2image opencv-python`
-   - Or uncomment them in `requirements.txt`
 
 ### Getting Help
 
