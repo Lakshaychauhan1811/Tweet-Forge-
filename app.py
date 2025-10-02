@@ -523,9 +523,8 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-## CrewAI integration removed: using LangChain + Groq only.
 
-# Do not recreate the app; update metadata on the existing instance
+
 app.title = "TweetForge"
 app.description = "AI-Powered Professional Tweet Generator with Real-time Research"
 app.version = "3.0.0"
