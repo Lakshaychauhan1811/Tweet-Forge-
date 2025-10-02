@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""
-TweetForge - AI-Powered Tweet Generator
-Startup script for the application
-"""
+
 
 import os
 import sys
