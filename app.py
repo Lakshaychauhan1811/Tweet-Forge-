@@ -480,15 +480,24 @@ def suggest_hashtags(body: HashtagSuggestRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+
 # Serve static frontend if available
-FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "web")
-if os.path.isdir(FRONTEND_DIR):
-    # Static assets under /static
-    
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIR = os.path.join(BASE_DIR, "web")
 STATIC_DIR = os.path.join(FRONTEND_DIR, "static")
 
-if os.path.isdir(STATIC_DIR):
-    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+templates = None
+
+if os.path.isdir(FRONTEND_DIR):
+    templates = Jinja2Templates(directory=FRONTEND_DIR)
+
+    if os.path.isdir(STATIC_DIR):
+        app.mount(
+            "/static",
+            StaticFiles(directory=STATIC_DIR),
+            name="static"
+        )
+
 
     # Use Jinja to render the provided HTML so {% %} blocks work
     templates = Jinja2Templates(directory=FRONTEND_DIR)
