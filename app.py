@@ -49,7 +49,7 @@ load_dotenv()
 
 
 
-app = FastAPI(title="TweetForge - Marketing Tweet Generator", version="1.0.0")
+app = FastAPI()
 
 app.add_middleware(
     SessionMiddleware,
