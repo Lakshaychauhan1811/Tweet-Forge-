@@ -786,13 +786,16 @@ async def auth_x_callback(request: Request, code: str = None, state: str = None,
         token_data = {
             "code": code,
             "grant_type": "authorization_code",
-            "client_id": X_CLIENT_ID,
             "redirect_uri": X_REDIRECT_URI,
             "code_verifier": code_verifier
         }
         
-        try:
-            response = requests.post(X_TOKEN_URL, data=token_data, timeout=10)
+        try:response = requests.post(
+    X_TOKEN_URL,
+    data=token_data,
+    auth=(X_CLIENT_ID, X_CLIENT_SECRET),
+    timeout=10,
+)
             if not response.ok:
                 logger.error(f"Failed to exchange code for token: {response.status_code} - {response.text}")
                 return RedirectResponse(url="/?auth_error=token_exchange_failed")
