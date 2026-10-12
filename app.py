@@ -554,10 +554,8 @@ app.add_middleware(
 )
 
 
-# OAuth 2.0 PKCE setup for X (Twitter)
 X_CLIENT_ID = os.getenv("X_CLIENT_ID")
 X_CLIENT_SECRET = os.getenv("X_CLIENT_SECRET")
-# Use 127.0.0.1 instead of localhost to match X Developer Portal configuration
 
 X_REDIRECT_URI = os.getenv(
     "X_REDIRECT_URI",
@@ -565,8 +563,8 @@ X_REDIRECT_URI = os.getenv(
 )
 
 X_AUTH_URL = "https://twitter.com/i/oauth2/authorize"
-X_TOKEN_URL = "https://api.twitter.com/2/oauth2/token"
-X_USER_INFO_URL = "https://api.twitter.com/2/users/me"
+X_TOKEN_URL = "https://api.x.com/2/oauth2/token"
+X_USER_INFO_URL = "https://api.x.com/2/users/me"
 X_TWEET_URL = "https://api.twitter.com/2/tweets"
 
 def generate_pkce_pair():
