@@ -788,18 +788,30 @@ async def auth_x_callback(request: Request, code: str = None, state: str = None,
             "code_verifier": code_verifier
         }
         
-        try:response = requests.post(
-    X_TOKEN_URL,
-    data=token_data,
-    auth=(X_CLIENT_ID, X_CLIENT_SECRET),
-    timeout=10,
-)
+      
+        try:
+            response = requests.post(
+                X_TOKEN_URL,
+                data=token_data,
+                auth=(X_CLIENT_ID, X_CLIENT_SECRET),
+                timeout=10,
+            )
+
             if not response.ok:
-                logger.error(f"Failed to exchange code for token: {response.status_code} - {response.text}")
-                return RedirectResponse(url="/?auth_error=token_exchange_failed")
+                logger.error(
+                    f"Failed to exchange code for token: "
+                    f"{response.status_code} - {response.text}"
+                )
+                return RedirectResponse(
+                    url="/?auth_error=token_exchange_failed"
+                )
+
         except Exception as e:
-            logger.error(f"Exception during token exchange: {str(e)}")
-            return RedirectResponse(url="/?auth_error=token_exchange_exception")
+            logger.error(f"Exception during token exchange: {e}")
+            return RedirectResponse(
+                url="/?auth_error=token_exchange_exception"
+            )
+
         
         token_info = response.json()
         access_token = token_info.get("access_token")
